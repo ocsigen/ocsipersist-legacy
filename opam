@@ -1,0 +1,31 @@
+opam-version: "1.2"
+name: "ocsipersist"
+version: "dev"
+
+author: "dev@ocsigen.org"
+maintainer: "dev@ocsigen.org"
+homepage: "http://ocsigen.org/ocsipersist/"
+bug-reports: "https://github.com/ocsigen/ocsipersist/issues/"
+dev-repo: "https://github.com/ocsigen/ocsipersist.git"
+license: "LGPL-2.1 with OCaml linking exception"
+build: [
+  ["ocaml" "setup.ml" "-configure"
+      "--%{dbm:enable}%-dbm"
+      "--%{sqlite3:enable}%-sqlite"
+      "--prefix" prefix]
+  ["ocaml" "setup.ml" "-build"]
+]
+install: ["ocaml" "setup.ml" "-install"]
+remove: [
+  ["ocamlfind" "remove" "ocsipersist"]
+]
+depends: [
+  "ocamlfind" {build}
+  "ocsigenserver"
+  ## OASIS is not required in released version
+  "oasis" {build & >= "0.4.4"}
+]
+depopts: [
+  "dbm"
+  "sqlite3"
+]
