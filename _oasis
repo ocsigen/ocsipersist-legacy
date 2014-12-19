@@ -1,0 +1,58 @@
+OASISFormat: 0.4
+Name: ocsipersist
+Version: 3.4.0
+Homepage: http://ocsigen.org/tyxml/
+Authors:
+  Vincent Balat,
+  Gabriel Kerneis,
+  Gabriel Radanne
+
+Synopsis: Simple k/v store interface to be used by an ocsigen server.
+
+License: LGPL-2.1 with OCaml linking exception
+Plugins: META (0.3), DevFiles (0.3)
+BuildTools: ocamlbuild
+
+AlphaFeatures: pure_interface
+
+
+Flag dbm
+  Description: Build the dbm module.
+  Default: false
+
+Flag sqlite
+  Description: Build the sqlite module.
+  Default: false
+
+
+Library ocsipersist
+  Path: src
+  Modules: Ocsipersist_sig
+  BuildDepends: lwt
+
+Library "ocsipersist-dbm"
+  FindlibName: dbm
+  FindlibParent: ocsipersist
+  Build$: flag(dbm)
+  Path: src_dbm
+  Modules: Ocsipersist
+  BuildDepends: threads, ocsigenserver.baselib, ocsipersist, dbm
+
+Library "ocsipersist-sqlite"
+  FindlibName: sqlite
+  FindlibParent: ocsipersist
+  Build$: flag(sqlite)
+  Path: src_sqlite
+  Modules: Ocsipersist
+  BuildDepends: threads, ocsigenserver.baselib, ocsipersist, sqlite3
+
+
+
+Document "ocsipersist"
+  Title: API reference for Ocsipersist
+  Type: ocamlbuild (0.3)
+  Install: true
+  InstallDir: $htmldir/api
+  BuildTools: ocamldoc
+  XOCamlbuildPath: ./
+  XOCamlbuildLibraries: ocsipersist

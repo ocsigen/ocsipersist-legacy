@@ -1,0 +1,7 @@
+PKG sqlite3
+PKG ocsigenserver.baselib
+PKG threads
+
+B +threads
+
+REC
