@@ -18,47 +18,53 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 *)
 
-
 (** Persistent data on hard disk. *)
 
 (** Persistent references *)
 module type REF = sig
 
-  (** When launching the program, if the value exists on hard disk,
-      it is loaded, otherwise it is initialised to the default value *)
+  (** When launching the program, if the value exists on hard disk, it
+      is loaded, otherwise it is initialised to the default value *)
+
+  (** Usually ['a Lwt.t]. The Web Storage API is synchronous, hence we
+      use ['a wrap = 'a] there. *)
+  type 'a wrap
 
   (** Type of persistent data *)
   type 'a t
 
-  (** Data are divided into stores.
-      Create one store for your project, where you will save all your data. *)
+  (** Data are divided into stores.  Create one store for your
+      project, where you will save all your data. *)
   type store
 
   (** Open a store (and create it if it does not exist)  *)
   val open_store : string -> store
 
   val make_persistent :
-    store:store -> name:string -> default:'a -> 'a t Lwt.t
+    store:store -> name:string -> default:'a -> 'a t wrap
   (** [make_persistent store name default] find a persistent value
       named [name] in store [store]
       from database, or create it with the default value [default] if it
       does not exist. *)
 
   val make_persistent_lazy :
-    store:store -> name:string -> default:(unit -> 'a) -> 'a t Lwt.t
+    store:store -> name:string -> default:(unit -> 'a) -> 'a t wrap
   (** Same as make_persistent but the default value is evaluated only
       if needed
   *)
 
   val make_persistent_lazy_lwt :
-    store:store -> name:string -> default:(unit -> 'a Lwt.t) -> 'a t Lwt.t
+    store:store ->
+    name:string ->
+    default:(unit -> 'a wrap) ->
+    'a t wrap
   (** Lwt version of make_persistent_lazy.
   *)
 
-  val get : 'a t -> 'a Lwt.t
+  val get : 'a t -> 'a wrap
   (** [get pv] gives the value of [pv] *)
 
-  val set : 'a t -> 'a -> unit Lwt.t
+  val set : 'a t -> 'a -> unit wrap
   (** [set pv value] sets a persistent value [pv] to [value] *)
 
 end
@@ -122,14 +128,13 @@ module type TABLE = sig
 
   (**/**)
   val iter_block : (string -> 'a -> unit) -> 'a table -> unit Lwt.t
-(** MAJOR WARNING: Unlike iter_step, this iterator won't miss any
-    entry and will run in one shot. It is therefore more efficient, BUT:
-    it will lock the WHOLE database during its execution,
-    thus preventing ANYBODY from accessing it (including the function f
-    which is iterated).
-    As a consequence : you MUST NOT use any function from ocsipersist in f,
-    otherwise you would lock yourself and everybody else ! Be VERY cautious.
-*)
+  (** MAJOR WARNING: Unlike iter_step, this iterator won't miss any
+      entry and will run in one shot. It is therefore more efficient,
+      BUT: it will lock the WHOLE database during its execution, thus
+      preventing ANYBODY from accessing it (including the function f
+      which is iterated).  As a consequence : you MUST NOT use any
+      function from ocsipersist in f, otherwise you would lock
+      yourself and everybody else ! Be VERY cautious.  *)
 end
 
 (** Common signature for all ocsipersist backends *)

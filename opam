@@ -12,6 +12,7 @@ build: [
   ["ocaml" "setup.ml" "-configure"
       "--%{dbm:enable}%-dbm"
       "--%{sqlite3:enable}%-sqlite"
+      "--%{js_of_ocaml:enable}%-webstorage"
       "--prefix" prefix]
   ["ocaml" "setup.ml" "-build"]
 ]
@@ -28,4 +29,5 @@ depends: [
 depopts: [
   "dbm"
   "sqlite3"
+  "js_of_ocaml"
 ]
