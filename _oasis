@@ -24,6 +24,10 @@ Flag sqlite
   Description: Build the sqlite module.
   Default: false
 
+Flag webstorage
+  Description: Build the Web Storage module.
+  Default: false
+
 
 Library ocsipersist
   Path: src
@@ -46,6 +50,14 @@ Library "ocsipersist-sqlite"
   Modules: Ocsipersist
   BuildDepends: threads, ocsigenserver.baselib, ocsipersist, sqlite3
 
+Library "ocsipersist-webstorage"
+  FindlibName: webstorage
+  FindlibParent: ocsipersist
+  Build$: flag(webstorage)
+  CompiledObject: byte
+  Path: src_webstorage
+  Modules: Ocsipersist_webstorage
+  BuildDepends: js_of_ocaml, js_of_ocaml.syntax, ocsipersist
 
 
 Document "ocsipersist"
