@@ -24,6 +24,10 @@ Flag sqlite
   Description: Build the sqlite module.
   Default: false
 
+Flag pgsql
+  Description: Build the pgsql module.
+  Default: false
+
 Flag webstorage
   Description: Build the Web Storage module.
   Default: false
@@ -41,6 +45,14 @@ Library "ocsipersist-dbm"
   Path: src_dbm
   Modules: Ocsipersist
   BuildDepends: threads, ocsigenserver.baselib, ocsipersist, dbm
+
+Library "ocsipersist-pgsql"
+  FindlibName: pgsql
+  FindlibParent: ocsipersist
+  Build$: flag(pgsql)
+  Path: src_pgsql
+  Modules: Ocsipersist
+  BuildDepends: threads, ocsigenserver.baselib, pgocaml, pgocaml.syntax, lwt.syntax
 
 Library "ocsipersist-sqlite"
   FindlibName: sqlite
