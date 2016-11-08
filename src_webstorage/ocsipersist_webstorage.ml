@@ -21,7 +21,7 @@
 type 'a wrap = 'a
 
 let storage () =
-  Js.Optdef.case (Dom_html.window##localStorage)
+  Js.Optdef.case (Dom_html.window##.localStorage)
     (fun () -> failwith "Browser storage not supported")
     (fun v -> v)
 
@@ -35,11 +35,11 @@ type store = string
 let open_store s = Lwt.return s
 
 let set id v =
-  (storage ())##setItem(id, Json.output v)
+  (storage ())##setItem id (Json.output v)
 
 let make_persistent_lazy ~store ~name ~default =
   let id = make_id ~store ~name in
-  let x = (storage ())##getItem(id)
+  let x = (storage ())##getItem id
   and f _ = id
   and g () = set id (default ()); id in
   Js.Opt.case x g f
@@ -51,7 +51,7 @@ let make_persistent ~store ~name ~default =
   make_persistent_lazy ~store ~name ~default
 
 let get id =
-  let x = (storage ())##getItem(id)
+  let x = (storage ())##getItem id
   and f = Json.unsafe_input
   and g () =
     (* this is not supposed to fail, beause the reference must have

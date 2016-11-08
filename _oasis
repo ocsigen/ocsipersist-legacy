@@ -69,7 +69,7 @@ Library "ocsipersist-webstorage"
   CompiledObject: byte
   Path: src_webstorage
   Modules: Ocsipersist_webstorage
-  BuildDepends: js_of_ocaml, js_of_ocaml.syntax, ocsipersist
+  BuildDepends: js_of_ocaml, js_of_ocaml.ppx, ocsipersist
 
 
 Document "ocsipersist"

@@ -12,7 +12,7 @@ build: [
   ["ocaml" "setup.ml" "-configure"
       "--%{dbm:enable}%-dbm"
       "--%{sqlite3:enable}%-sqlite"
-      "--%{js_of_ocaml:enable}%-webstorage"
+      "--enable-webstorage" {ocaml-version > "4.02.2" & "js_of_ocaml"}
       "--prefix" prefix]
   ["ocaml" "setup.ml" "-build"]
 ]
