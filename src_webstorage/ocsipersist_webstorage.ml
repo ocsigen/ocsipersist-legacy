@@ -32,7 +32,7 @@ let make_id ~store ~name : 'a t =
 
 type store = string
 
-let open_store s = s
+let open_store s = Lwt.return s
 
 let set id v =
   (storage ())##setItem(id, Json.output v)
