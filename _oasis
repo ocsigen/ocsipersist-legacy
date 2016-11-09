@@ -24,10 +24,20 @@ Flag sqlite
   Description: Build the sqlite module.
   Default: false
 
+Flag pgsql
+  Description: Build the pgsql module.
+  Default: false
+
 Flag webstorage
   Description: Build the Web Storage module.
   Default: false
 
+Executable "ocsidbm"
+  Path: src_dbm
+  Build$: flag(dbm)
+  MainIs: ocsidbm.ml
+  CompiledObject: best
+  BuildDepends: lwt.unix, dbm
 
 Library ocsipersist
   Path: src
@@ -41,6 +51,14 @@ Library "ocsipersist-dbm"
   Path: src_dbm
   Modules: Ocsipersist
   BuildDepends: threads, ocsigenserver.baselib, ocsipersist, dbm
+
+Library "ocsipersist-pgsql"
+  FindlibName: pgsql
+  FindlibParent: ocsipersist
+  Build$: flag(pgsql)
+  Path: src_pgsql
+  Modules: Ocsipersist
+  BuildDepends: threads, ocsigenserver.baselib, pgocaml, pgocaml.syntax, lwt.syntax
 
 Library "ocsipersist-sqlite"
   FindlibName: sqlite
@@ -57,8 +75,7 @@ Library "ocsipersist-webstorage"
   CompiledObject: byte
   Path: src_webstorage
   Modules: Ocsipersist_webstorage
-  BuildDepends: js_of_ocaml, js_of_ocaml.syntax, ocsipersist
-
+  BuildDepends: js_of_ocaml, js_of_ocaml.ppx, ocsipersist
 
 Document "ocsipersist"
   Title: API reference for Ocsipersist
