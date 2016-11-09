@@ -32,6 +32,12 @@ Flag webstorage
   Description: Build the Web Storage module.
   Default: false
 
+Executable "ocsidbm"
+  Path: src_dbm
+  Build$: flag(dbm)
+  MainIs: ocsidbm.ml
+  CompiledObject: best
+  BuildDepends: lwt.unix, dbm
 
 Library ocsipersist
   Path: src
@@ -70,7 +76,6 @@ Library "ocsipersist-webstorage"
   Path: src_webstorage
   Modules: Ocsipersist_webstorage
   BuildDepends: js_of_ocaml, js_of_ocaml.ppx, ocsipersist
-
 
 Document "ocsipersist"
   Title: API reference for Ocsipersist

@@ -62,10 +62,9 @@ let rec parse_global_config (store, ocsidbm, delayloading as d) = function
   | _ -> Ocsigen_extensions.badconfig
            "Unexpected content inside Ocsipersist config"
 
-let (directory, ocsidbm) =
-  (ref ((Ocsigen_config.get_datadir ())^"/ocsipersist"),
-   ref ((Ocsigen_config.get_extdir ())^"/ocsidbm"^Ocsigen_config.native_ext))
+let directory = ref (Ocsigen_config.get_datadir () ^"/ocsipersist")
 
+let ocsidbm = ref "ocsidbm"
 
 (*****************************************************************************)
 (** Communication with the DB server *)
@@ -92,7 +91,7 @@ let rec try_connect sname =
         Unix.dup2 devnull Unix.stdout;
         Unix.close devnull;
         Unix.close Unix.stdin;
-        Unix.execv !ocsidbm param
+        Unix.execvp !ocsidbm param
       in
       let pid = Lwt_unix.fork () in
       if pid = 0
