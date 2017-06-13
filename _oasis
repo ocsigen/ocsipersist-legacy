@@ -50,7 +50,7 @@ Library "ocsipersist-dbm"
   Build$: flag(dbm)
   Path: src_dbm
   Modules: Ocsipersist
-  BuildDepends: threads, ocsigenserver.baselib, ocsipersist, dbm
+  BuildDepends: threads, ocsigenserver.baselib, ocsipersist, dbm, xml-light
 
 Library "ocsipersist-pgsql"
   FindlibName: pgsql
@@ -58,7 +58,7 @@ Library "ocsipersist-pgsql"
   Build$: flag(pgsql)
   Path: src_pgsql
   Modules: Ocsipersist
-  BuildDepends: threads, ocsigenserver.baselib, pgocaml, pgocaml.syntax, lwt.syntax
+  BuildDepends: threads, ocsigenserver.baselib, pgocaml, pgocaml.syntax, lwt.syntax, xml-light
 
 Library "ocsipersist-sqlite"
   FindlibName: sqlite
@@ -66,7 +66,7 @@ Library "ocsipersist-sqlite"
   Build$: flag(sqlite)
   Path: src_sqlite
   Modules: Ocsipersist
-  BuildDepends: threads, ocsigenserver.baselib, ocsipersist, sqlite3
+  BuildDepends: threads, ocsigenserver.baselib, ocsipersist, sqlite3, xml-light
 
 Library "ocsipersist-webstorage"
   FindlibName: webstorage
