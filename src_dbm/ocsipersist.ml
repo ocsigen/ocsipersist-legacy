@@ -357,3 +357,5 @@ let length table =
    result in some case (with a version of ocsipersist based on Dbm) *)
 
 let _ = Ocsigen_extensions.register ~name:"ocsipersist" ~init_fun ()
+
+let init () = failwith "init not implemented yet"

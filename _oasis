@@ -41,7 +41,7 @@ Executable "ocsidbm"
 
 Library ocsipersist
   Path: src
-  Modules: Ocsipersist_sig
+  Modules: Ocsipersist_sig, Ocsipersist
   BuildDepends: lwt
 
 Library "ocsipersist-dbm"
@@ -49,7 +49,7 @@ Library "ocsipersist-dbm"
   FindlibParent: ocsipersist
   Build$: flag(dbm)
   Path: src_dbm
-  Modules: Ocsipersist
+  InternalModules: Ocsipersist
   BuildDepends: threads, ocsigenserver.baselib, ocsipersist, dbm, xml-light
 
 Library "ocsipersist-pgsql"
@@ -57,7 +57,7 @@ Library "ocsipersist-pgsql"
   FindlibParent: ocsipersist
   Build$: flag(pgsql)
   Path: src_pgsql
-  Modules: Ocsipersist
+  InternalModules: Ocsipersist
   BuildDepends: threads, ocsigenserver.baselib, pgocaml, pgocaml.syntax, lwt.syntax, xml-light
 
 Library "ocsipersist-sqlite"
@@ -65,7 +65,8 @@ Library "ocsipersist-sqlite"
   FindlibParent: ocsipersist
   Build$: flag(sqlite)
   Path: src_sqlite
-  Modules: Ocsipersist
+  Modules: Ocsipersist_sqlite
+  InternalModules: Ocsipersist
   BuildDepends: threads, ocsigenserver.baselib, ocsipersist, sqlite3, xml-light
 
 Library "ocsipersist-webstorage"

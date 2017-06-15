@@ -225,3 +225,5 @@ let init_fun config =
   conn_pool := Lwt_pool.create !size_conn_pool ~validate:PGOCaml.alive connect
 
 let _ = Ocsigen_extensions.register ~name:"ocsipersist" ~init_fun ()
+
+let init () = failwith "init not implemented yet"

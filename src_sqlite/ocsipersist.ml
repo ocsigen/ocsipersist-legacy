@@ -43,11 +43,6 @@ let rec parse_global_config = function
   | _ -> raise (Ocsigen_extensions.Error_in_config_file
                   ("Unexpected content inside Ocsipersist config"))
 
-(* This reference is overwritten when the init function (at the end of the file)
-   is run, which occurs when the extension is loaded *)
-let db_file = ref ((Ocsigen_config.get_datadir ())^"/ocsidb")
-
-
 (*****************************************************************************)
 (** Useful functions on database *)
 
@@ -72,7 +67,10 @@ let exec_safely f =
   let aux () =
     let db =
       Mutex.lock m ;
-      try db_open !db_file with e -> Mutex.unlock m; raise e
+      try
+        db_open (Ocsipersist_sqlite.get_file ())
+      with e ->
+        Mutex.unlock m; raise e
     in
     (try
        let r = f db in
@@ -308,24 +306,26 @@ let fold_table = fold_step
 let length table =
   db_length table
 
-
-(* Registration of the extension *)
-
-let init config =
-  db_file := Ocsigen_config.get_datadir () ^"/ocsidb";
-  (match parse_global_config config with
-   | None -> ()
-   | Some d -> db_file := d
-  );
-  (* We check that we can access the database *)
+let init () =
   try Lwt_main.run (exec_safely (fun _ -> ()))
   with e ->
     Ocsigen_messages.errlog
       (Printf.sprintf
          "Error opening database file '%s' when registering Ocsipersist. \
           Check that the directory exists, and that Ocsigen has enough \
-          rights" !db_file);
+          rights" (Ocsipersist_sqlite.get_file ()));
     raise e
 
+let init_fun config =
+  let file =
+    match parse_global_config config with
+    | None ->
+      Ocsigen_config.get_datadir () ^"/ocsidb"
+    | Some d ->
+      d
+  in
+  Ocsipersist_sqlite.set_file file;
+  (* We check that we can access the database *)
+  init ()
 
-let _ = Ocsigen_extensions.register ~name:"ocsipersist" ~init_fun:init ()
+let _ = Ocsigen_extensions.register ~name:"ocsipersist" ~init_fun ()

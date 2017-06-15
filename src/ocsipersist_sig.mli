@@ -141,4 +141,5 @@ end
 module type T = sig
   include REF
   include TABLE
+  val init : unit -> unit
 end
